@@ -1,0 +1,12 @@
+<interface>
+
+	<layout name="layout" 
+			layout_type="vert" 	
+			shrink_to_children="both"
+		>
+		<image name="us_map" src="%APP%/data/images/temp/1920x917_map_and_projection_area.png" />
+		
+	</layout>
+		
+</interface>
+

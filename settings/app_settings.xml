@@ -1,0 +1,20 @@
+<settings>
+
+	<!-- App-specific settings and configs. Formerlly layout.xml. Renamed to clarify that it's not a layout file for layout sprites -->
+	
+	<!-- Standard animation duration, in seconds. -->
+	<float name="animation:duration" value="0.5" />
+	
+	<!-- If you cache xml, they'll load faster after the first one, but you'll have to restart the app to see any changes -->
+	<text  name="xml:cache" value="false" />
+	
+	<!-- map rectangles for pixel and geo (longitude, latitude) positions (see diagram)-->
+	<rect name="map:pixels" t="0.0" l="0.0" w="1920.0" h="917.0" />
+	<rect name="map:geo" t="83.0" l="-24.0" b="-60.0" r="348.0"  />w
+	
+	<!-- map reference points (see diagram)-->
+	<float  name="map:west_iceland:longitude_ref" value="-24.0" />
+	<float  name="map:east_greenland:longitude_ref" value="-10.0" />
+	<float  name="map:iceland_greenland_divide:latitude_ref" value="67.0" />
+		
+</settings>
