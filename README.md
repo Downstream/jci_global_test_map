@@ -69,6 +69,6 @@ In `map_view.cpp`:
 
 ## Additional Information
 
-All the longitudes and latitudes (i.e. corner point coordinates for the geo map) for this specific map image were approximated. These values can be tweaked in settings/app_settings.xml for better accuracy
+All the longitudes and latitudes (i.e. corner point coordinates for the geo map) for this specific map image were approximated. These values can be tweaked in `settings/app_settings.xml` for better accuracy
 
 Coordinates of various locations were hardcoded in `map_view.cpp` for additional testing purposes.
