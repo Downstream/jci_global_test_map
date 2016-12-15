@@ -43,32 +43,47 @@ This can be handled by adding an additional statement to "adjust" (as above) any
 
 From there, the calculation is pretty straight forward.
 
-In `map_view.cpp`:
+In `settings\app_settings.xml`, define the longitude/latitude corner points of the geo map, as well as the reference longitudes/latitudes to handle Iceland and Greenland:
 ```
-	// Make any longitude adjustments
-	if (lon < mIcelandRef || (lon < mGreenlandRef && lat > mGreenlandIcelandDivRef)){
-		lon += 360;
+	<!-- map rectangles for pixel and geo (longitude, latitude) positions (see diagram)-->
+	<rect name="map:pixels" t="0.0" l="0.0" w="1920.0" h="917.0" />
+	<rect name="map:geo" t="83.0" l="-24.0" b="-60.0" r="348.0"  />
+	
+	<!-- map reference points (see diagram)-->
+	<float  name="map:west_iceland:longitude_ref" value="-24.0" />
+	<float  name="map:east_greenland:longitude_ref" value="-10.0" />
+	<float  name="map:iceland_greenland_divide:latitude_ref" value="67.0" />
+```
+
+In `src\ui\map\map_view.cpp`:
+```
+	void MapView::plotPoint(float lat, float lon, float size)
+	{
+		// Make any longitude adjustments
+		if (lon < mIcelandRef || (lon < mGreenlandRef && lat > mGreenlandIcelandDivRef)){
+			lon += 360;
+		}
+
+		// Find corresponding pixel positions
+		float pixelPosX = (lon - mMapGeoRect.getX1()) / mMapGeoRect.getWidth();
+		pixelPosX *= mMapPixelRect.getWidth();
+		pixelPosX += mMapPixelRect.getX1();
+
+		float pixelPosY = (lat - mMapGeoRect.getY1()) / mMapGeoRect.getHeight();;
+		pixelPosY *= mMapPixelRect.getHeight();
+		pixelPosY += mMapPixelRect.getY1();
+
+		// Draw point
+		auto circ = new ds::ui::Circle(mEngine, true, size);
+		mMap->addChildPtr(circ);
+		circ->setPosition(pixelPosX, pixelPosY);
+		circ->setColorA(mPointColor);
+		circ->setCenter(0.5f, 0.5f);
 	}
-
-	// Find corresponding pixel positions
-	float pixelPosX = (lon - mMapGeoRect.getX1()) / mMapGeoRect.getWidth();
-	pixelPosX *= mMapPixelRect.getWidth();
-	pixelPosX += mMapPixelRect.getX1();
-
-	float pixelPosY = (lat - mMapGeoRect.getY1()) / mMapGeoRect.getHeight();;
-	pixelPosY *= mMapPixelRect.getHeight();
-	pixelPosY += mMapPixelRect.getY1();
-
-	// Draw point
-	auto circ = new ds::ui::Circle(mEngine, true, size);
-	mMap->addChildPtr(circ);
-	circ->setPosition(pixelPosX, pixelPosY);
-	circ->setColorA(mPointColor);
-	circ->setCenter(0.5f, 0.5f);
 ```
 
 ## Additional Information
 
-All the longitudes and latitudes (i.e. corner point coordinates for the geo map) for this specific map image were approximated. These values can be tweaked in `settings/app_settings.xml` for better accuracy
+All the longitudes and latitudes (i.e. corner point coordinates and reference points for the geo map) for this specific map image were approximated. These values can be tweaked in `settings\app_settings.xml` for better accuracy.
 
-Coordinates of various locations were hardcoded in `map_view.cpp` for additional testing purposes.
+Coordinates of various locations were hardcoded in `src\ui\map\map_view.cpp` for additional testing purposes.
